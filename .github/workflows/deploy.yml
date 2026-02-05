@@ -1,0 +1,67 @@
+name: CI/CD - Chatbot
+
+on:
+  push:
+    branches: [ main ]
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Install & build frontend
+        working-directory: frontend
+        run: |
+          npm install
+          npm run build
+        
+      - name: Deploy frontend to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          source: "frontend/*"
+          target: "/home/ubuntu/Chatbot/frontend"
+
+      - name: Restart frontend (PM2)
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd /home/ubuntu/Chatbot/frontend
+            npm install
+            npm run build
+            pm2 restart chatbot-frontend 
+            pm2 save
+
+      # ---------- BACKEND (Node.js) ----------
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Deploy backend to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          source: "backend/*"
+          target: "/home/ubuntu/Chatbot/backend"
+
+      - name: Restart backend (PM2)
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd /home/ubuntu/Chatbot/backend
+            npm install
+            pm2 restart chatbot-backend 
+            pm2 save
