@@ -30,7 +30,7 @@ export default function ChatWindow() {
   useEffect(() => {
     const fetchModels = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models`);
         const data = await response.json();
         setModels(data.models);
       } catch (error) {

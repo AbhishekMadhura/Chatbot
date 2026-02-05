@@ -15,7 +15,7 @@ const openai = new OpenAI({
   baseURL: 'https://integrate.api.nvidia.com/v1',
 });
 
-app.post('/api/chat', async (req, res) => {
+app.post('/api/v1/chat', async (req, res) => {
   const { message, history, model } = req.body;
   const apiKey = process.env.NVIDIA_API_KEY;
 
@@ -75,7 +75,7 @@ app.post('/api/chat', async (req, res) => {
 });
 
 // Endpoint to get available models
-app.get('/api/models', (req, res) => {
+app.get('/api/v1/models', (req, res) => {
   const models = [
     { id: 'minimaxai/minimax-m2', name: 'MiniMax M2', category: 'General Purpose' },
     { id: 'meta/llama-3.3-70b-instruct', name: 'Llama 3.3 70B Instruct', category: 'General Purpose' },
