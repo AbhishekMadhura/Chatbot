@@ -30,7 +30,7 @@ export default function ChatWindow() {
   useEffect(() => {
     const fetchModels = async () => {
       try {
-        const response = await fetch('http://localhost:3002/api/models');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`);
         const data = await response.json();
         setModels(data.models);
       } catch (error) {
@@ -63,7 +63,7 @@ export default function ChatWindow() {
     setMessages(prev => [...prev, { role: 'assistant', content: '', model: currentModel }]);
 
     try {
-      const response = await fetch('http://localhost:3002/api/chat', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
