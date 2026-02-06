@@ -12,6 +12,15 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
+      # ---------- CLEANUP ----------
+      - name: Cleanup frontend
+        run: |
+          rm -rf frontend/node_modules frontend/.git
+
+      - name: Cleanup backend
+        run: |
+          rm -rf backend/node_modules backend/.git
+
       # ---------- FRONTEND ----------
       - name: Deploy frontend to EC2
         uses: appleboy/scp-action@v0.1.7
@@ -46,8 +55,6 @@ jobs:
           source: "backend"
           target: "/home/ubuntu/Chatbot"
           rm: true
-          exclude: |
-            node_modules
 
       - name: Restart backend (PM2)
         uses: appleboy/ssh-action@v0.1.10
