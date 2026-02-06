@@ -147,7 +147,7 @@ export default function ChatWindow() {
         <div className="header-content">
           <div className="header-text">
             <h1>AI Chatbot</h1>
-            <p>Powered by NVIDIA Tools</p>
+            <p>Powered by NVIDIA Tools </p>
           </div>
           <div className="model-selector">
             <label htmlFor="model-select">Model:</label>
