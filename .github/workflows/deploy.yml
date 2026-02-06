@@ -22,9 +22,6 @@ jobs:
           source: "frontend"
           target: "/home/ubuntu/Chatbot"
           rm: true
-          exclude: |
-            node_modules
-            .next
 
       - name: Restart frontend (PM2)
         uses: appleboy/ssh-action@v0.1.10
